@@ -5,8 +5,10 @@ from datetime import datetime, timedelta, timezone
 from termcolor import colored
 
 logging.NOTE = 15
+logging.SUCCESS = 22
 logging.HINT = 23
 logging.TRACE = 25
+logging.addLevelName(logging.SUCCESS, "SUCCESS")
 logging.addLevelName(logging.NOTE, "NOTE")
 logging.addLevelName(logging.HINT, "HINT")
 logging.addLevelName(logging.TRACE, "TRACE")
@@ -17,6 +19,7 @@ class ColorFormatter(logging.Formatter):
             logging.DEBUG: "grey",
             logging.NOTE: "grey",
             logging.INFO: "white",
+            logging.SUCCESS: "green",
             logging.HINT: "cyan",
             logging.TRACE: "magenta",
             logging.WARNING: "yellow",
@@ -113,6 +116,10 @@ def trace(self, *args, **kwargs):
     log.log(logging.TRACE, *args, **kwargs)
 
 
+def success(self, *args, **kwargs):
+    log.log(logging.SUCCESS, *args, **kwargs)
+
+
 def hint(self, *args, **kwargs):
     log.log(logging.HINT, *args, **kwargs)
 
@@ -125,6 +132,7 @@ logging.Logger.fatal = fatal
 logging.Logger.trace = trace
 logging.Logger.hint = hint
 logging.Logger.note = note
+logging.Logger.success = success
 
 os.environ['FORCE_COLOR'] = "yes"
 
@@ -136,6 +144,7 @@ class Level:
     DEBUG = logging.DEBUG
     HINT = logging.HINT
     INFO = logging.INFO
+    SUCCESS = logging.SUCCESS
     NOTE = logging.NOTE
     TRACE = logging.TRACE
     WARNING = logging.WARNING
