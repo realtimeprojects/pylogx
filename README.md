@@ -3,6 +3,7 @@
 
 ## Features
 
+-   Additional log levels (HINT, NOTE, TRACE) for more granularity
 -   Colorize log messages based on the log level
 -   Indent log messages
 -   Log relative time stamps
