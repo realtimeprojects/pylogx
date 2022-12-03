@@ -14,10 +14,10 @@
 ### Colorize your log messages
 
         import time
-        from pylogx import log, ColoredFormatter
+        from pylogx import log, ColorFormatter
 
         console = logging.StreamHandler()
-        cf = ColoredFormatter(fmt="%(prettyDelta)s [%(prettyRelativeDelta)s] %(indent)s %(message)s",
+        cf = ColorFormatter(fmt="%(prettyDelta)s [%(prettyRelativeDelta)s] %(indent)s %(message)s",
                               ups=[Level.NOTE]) 
         console.setFormatter(cf)
         console.setLevel(Level.NOTE)

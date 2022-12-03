@@ -1,6 +1,6 @@
 [project]
 name = "pylogx"
-version = "0.1.1"
+version = "0.1.2"
 description="python logging extensions supporting additional levels, colorization and more"
 authors = [
     { name="Claudio Klingler", email="ck@realtime-projects.com"}
