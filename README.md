@@ -13,12 +13,12 @@
 
 ### Colorize your log messages
 
+        import logging
         import time
-        from pylogx import log, ColorFormatter
+        from pylogx import log, ColorFormatter, Level
 
         console = logging.StreamHandler()
-        cf = ColorFormatter(fmt="%(prettyDelta)s [%(prettyRelativeDelta)s] %(indent)s %(message)s",
-                              ups=[Level.NOTE]) 
+        cf = ColorFormatter(ups=[Level.NOTE])
         console.setFormatter(cf)
         console.setLevel(Level.NOTE)
         log.addHandler(console)
@@ -32,12 +32,15 @@
 
 ### Indent your log messages
 
+        import logging
         from pylogx import log, IndentFilter
 
         formatter = logging.Formatter(fmt="%(asctime)s %(indent)s%(message)s")
-        log.setFormatter(formatter)
+        sh = logging.StreamHandler()
+        sh.setFormatter(formatter)
+        log.addHandler(sh)
 
-        iflt = IndentFilter()
+        iflt = IndentFilter(indent=" => ")
         log.addFilter(iflt)
 
         log.info("base level")
@@ -51,18 +54,24 @@
         iflt.dec()
         log.info("sub level")
 
-        iflt.dec()
-        log.info("base level")
-
 ### Print log messages with relative time stamp
 
+        import time
         import logging
-        from pylogx import log, PrettyDelta
+        from pylogx import log, PrettyDelta, Level
 
         pd = PrettyDelta()
-        log.addFilter(prettyDelta)
+        log.addFilter(pd)
         prd = PrettyDelta(name="prettyRelativeDelta", fmt="+%M:%S.%f", relative=True)
         log.addFilter(prd)
-        formatter = logging.Formatter(fmt="%(prettyDelta)s [%(prettyRelativeDelta)s] %(indent)s %(message)s")
-        log.setFormatter(formatter)
-        log.message("enjoy relative timestamps)
+        formatter = logging.Formatter(fmt="%(prettyDelta)s [%(prettyRelativeDelta)s] %(message)s")
+        sh = logging.StreamHandler()
+        sh.setFormatter(formatter)
+        log.addHandler(sh)
+        log.setLevel(Level.INFO)
+
+        log.warning("enjoy relative timestamps")
+        time.sleep(1)
+        log.info("enjoy relative timestamps")
+        time.sleep(2)
+        log.info("enjoy relative timestamps")
