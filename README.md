@@ -13,22 +13,18 @@
 
 ### Colorize your log messages
 
-        import logging
         import time
-        from pylogx import log, ColorFormatter, Level
+        import pylogx
+        from pylogx import log
 
-        console = logging.StreamHandler()
-        cf = ColorFormatter(ups=[Level.NOTE])
-        console.setFormatter(cf)
-        console.setLevel(Level.NOTE)
-        log.addHandler(console)
+        pylogx.enable_colors(level=pylogx.Level.NOTE, ups=[pylogx.Level.NOTE])
 
         log.trace("Have fun with colorized log messages")
         log.note("This message disappears with the next log message")
         time.sleep(5)
         log.note("Another message disappearing soon..")
         time.sleep(5)
-        log.info("Last message is gone")
+        log.success("Last message is gone")
 
 ### Indent your log messages
 

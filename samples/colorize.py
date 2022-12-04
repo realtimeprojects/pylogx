@@ -1,12 +1,12 @@
-import logging
+import sys
 import time
-from pylogx import log, ColorFormatter, Level
+import pylogx
+from pylogx import log
 
-console = logging.StreamHandler()
-cf = ColorFormatter(ups=[Level.NOTE])
-console.setFormatter(cf)
-console.setLevel(Level.NOTE)
-log.addHandler(console)
+pylogx.enable_colors(fmt="%(asctime)s %(message)s",
+                     stream=sys.stdout,
+                     level=pylogx.Level.NOTE,
+                     ups=[pylogx.Level.NOTE])
 
 log.trace("Have fun with colorized log messages")
 log.note("This message disappears with the next log message")
