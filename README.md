@@ -8,6 +8,9 @@
 -   Indent log messages
 -   Log relative time stamps
 
+## Documentation
+
+-   Check the (pylox documentation)[doc/pylogx.md] (some) for more details.
 
 ## Quickstart
 
