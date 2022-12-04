@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 import logging
-from pylogx import log, ColorFormatter, IndentFilter, PrettyDelta, Level
+from pylogx import log, ColorFormatter, IndentFilter, PrettyDelta, Level, levels
 import time
 
 indentFilter = IndentFilter()
@@ -30,3 +30,5 @@ time.sleep(1)
 log.note("note message3")
 time.sleep(1)
 log.info("info message")
+levels[Level.TRACE]['color'] = "cyan"
+log.trace("trace message in cyan")

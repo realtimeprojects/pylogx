@@ -107,11 +107,13 @@ def readLevels(file=None):
     if not file:
         file = os.path.join(os.path.dirname(__file__), "levels.json")
     levelFP = open(file)
-    levels = json.load(levelFP)
+    lvls = json.load(levelFP)
     actives = os.environ.get("PYLOG_LEVELS")
     if actives:
         actives = actives.split(",")
-    for (number, data) in levels.items():
+    levels = {}
+    for (number, data) in lvls.items():
+        levels[int(number)] = data
         if not actives or data['name'] in actives:
             registerLevel(int(number), data)
     return levels
@@ -121,7 +123,7 @@ levels = readLevels()
 
 
 def getLevelByNumber(number):
-    return levels[str(number)]
+    return levels[number]
 
 
 os.environ['FORCE_COLOR'] = "yes"

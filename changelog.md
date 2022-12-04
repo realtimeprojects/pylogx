@@ -1,3 +1,15 @@
+# v0.4.3
+
+-   export levels for color customization
+
+# v0.4.2
+
+-   fix import errors
+
+# v0.4.1
+
+-   update documentation
+
 # v0.4.0
 
 -   support user-defined levels.

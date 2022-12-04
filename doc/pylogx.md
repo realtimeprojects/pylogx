@@ -1,5 +1,14 @@
 # pylox documentation
 
+## Color customizatoin
+
+An easy way to customize the colors of the log messages is to update the level definitions.
+
+    import pylogx
+    pylogx.levels[pylogx.Level.TRACE]['color'] = "cyan"
+
+Check the [termcolor](https://pypi.org/project/termcolor/) documentation for the supported colors.
+
 ## Level Configuration
 
 ### Register custom levels
