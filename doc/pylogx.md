@@ -4,12 +4,12 @@
 
 ### Register custom levels
 
-You can register custom levels using the `registerLevel` functions.
+You can register custom levels using the `registerLevel()` functions.
 
     import pylogx
     pylogx.registerLevel(35, {"name": "HEAVYW", "color": "yellow",  "on_color": null, "attrs": ["bold"]})
 
-Or read your own [level json definition](../pylogx/levels.json) file:
+Or read your own [level json definition](../pylogx/levels.json) file using the `readLevels()` function:
 
     import pylogx
     pylogx.readLevels("mylevels.json")
