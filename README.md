@@ -10,7 +10,7 @@
 
 ## Documentation
 
--   Check the [pylox documentation](doc/pylogx.md) for more details.
+-   Check the [pylox documentation](https://github.com/realtimeprojects/pylogx/blob/main/doc/pylogx.md) for more details.
 
 ## Quickstart
 
