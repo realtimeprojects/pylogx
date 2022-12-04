@@ -1,0 +1,12 @@
+{
+    "10": {"name": "DEBUG",    "color": "grey",    "on_color": null, "attrs": null     },
+    "15": {"name": "NOTE",     "color": "grey",    "on_color": null, "attrs": ["bold"] },
+    "20": {"name": "INFO",     "color": "white",   "on_color": null, "attrs": null     },
+    "21": {"name": "PENDING",  "color": "grey",    "on_color": null, "attrs": ["bold"] },
+    "23": {"name": "SUCCESS",  "color": "green",   "on_color": null, "attrs": null     },
+    "25": {"name": "HINT",     "color": "cyan",    "on_color": null, "attrs": null     },
+    "27": {"name": "TRACE",    "color": "magenta", "on_color": null, "attrs": null     },
+    "30": {"name": "WARNING",  "color": "yellow",  "on_color": null, "attrs": null     },
+    "40": {"name": "ERROR",    "color": "red",     "on_color": null, "attrs": null     },
+    "50": {"name": "CRITICAL", "color": "red",     "on_color": null, "attrs": ["bold"] }
+}

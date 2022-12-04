@@ -1,38 +1,16 @@
 import os
 import sys
 import logging
+import json
 from datetime import datetime, timedelta, timezone
 from termcolor import colored
 
-logging.NOTE = 15
-logging.SUCCESS = 22
-logging.HINT = 23
-logging.TRACE = 25
-logging.addLevelName(logging.SUCCESS, "SUCCESS")
-logging.addLevelName(logging.NOTE, "NOTE")
-logging.addLevelName(logging.HINT, "HINT")
-logging.addLevelName(logging.TRACE, "TRACE")
+
+class Level:
+    pass
 
 
 class ColorFormatter(logging.Formatter):
-    COLORS = {
-            logging.DEBUG: "grey",
-            logging.NOTE: "grey",
-            logging.INFO: "white",
-            logging.SUCCESS: "green",
-            logging.HINT: "cyan",
-            logging.TRACE: "magenta",
-            logging.WARNING: "yellow",
-            logging.ERROR: "red",
-            logging.CRITICAL: "red",
-    }
-
-    ATTRIBUTES = {
-            logging.NOTE: ["bold"],
-            logging.CRITICAL: ["bold"]
-    }
-    ON_COLORS = {}
-
     def __init__(self, fmt="%(message)s", ups=[], *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.args = args
@@ -41,23 +19,20 @@ class ColorFormatter(logging.Formatter):
         self.ups = ups
         self.lastLevel = 0
 
-        self.colors = ColorFormatter.COLORS
-        self.attributes = ColorFormatter.ATTRIBUTES
-        self.on_colors = ColorFormatter.ON_COLORS
-
     def format(self, record):
-        log_fmt = self.get_colored_format(record.levelno)
+        log_fmt = self.getColoredFormat(record.levelno)
         formatter = logging.Formatter(log_fmt, *self.args, **self.kwargs)
         return formatter.format(record)
 
-    def get_colored_format(self, level):
+    def getColoredFormat(self, level):
+        lvl = getLevelByNumber(level)
         kwargs = {}
-        if level in self.colors:
-            kwargs["color"] = self.colors[level]
-        if level in self.on_colors:
-            kwargs["on_color"] = self.on_colors[level]
-        if level in self.attributes:
-            kwargs["attrs"] = self.attributes[level]
+        if lvl['color']:
+            kwargs["color"] = lvl['color']
+        if lvl['on_color']:
+            kwargs["on_color"] = lvl['on_color']
+        if lvl['attrs']:
+            kwargs["attrs"] = lvl['attrs']
         fmt = colored(self._fmt, **kwargs)
         if self.lastLevel in self.ups:
             fmt = "\033[2K" + fmt
@@ -107,50 +82,52 @@ class PrettyDelta(logging.Filter):
         return True
 
 
-def fatal(self, *args, **kwargs):
-    log.critical(*args, **kwargs)
-    sys.exit(255)
+class LogCall:
+    def __init__(self, level):
+        self.level = level
+
+    def log(self, *args, **kwargs):
+        log.log(self.level, *args, **kwargs)
 
 
-def trace(self, *args, **kwargs):
-    log.log(logging.TRACE, *args, **kwargs)
+def _logfnc(level):
+    lc = LogCall(level)
+    return lc.log
 
 
-def success(self, *args, **kwargs):
-    log.log(logging.SUCCESS, *args, **kwargs)
+def registerLevel(number, level):
+    name = level['name']
+    if not hasattr(logging, name):
+        setattr(logging, name, number)
+        logging.addLevelName(number, name)
+    setattr(Level, name, number)
+    setattr(logging.Logger, name.lower(), _logfnc(number))
 
 
-def hint(self, *args, **kwargs):
-    log.log(logging.HINT, *args, **kwargs)
+def readLevels(file=None):
+    if not file:
+        file = os.path.join(os.path.dirname(__file__), "levels.json")
+    levelFP = open(file)
+    levels = json.load(levelFP)
+    actives = os.environ.get("PYLOG_LEVELS")
+    if actives:
+        actives = actives.split(",")
+    for (number, data) in levels.items():
+        if not actives or data['name'] in actives:
+            registerLevel(int(number), data)
+    return levels
 
 
-def note(self, *args, **kwargs):
-    log.log(logging.NOTE, *args, **kwargs)
+levels = _readLevels()
 
 
-logging.Logger.fatal = fatal
-logging.Logger.trace = trace
-logging.Logger.hint = hint
-logging.Logger.note = note
-logging.Logger.success = success
+def getLevelByNumber(number):
+    return levels[str(number)]
+
 
 os.environ['FORCE_COLOR'] = "yes"
-
 log = logging.getLogger().getChild('pylogx')
-
-
-class Level:
-    NOTSET = logging.NOTSET
-    DEBUG = logging.DEBUG
-    HINT = logging.HINT
-    INFO = logging.INFO
-    SUCCESS = logging.SUCCESS
-    NOTE = logging.NOTE
-    TRACE = logging.TRACE
-    WARNING = logging.WARNING
-    ERROR = logging.ERROR
-    CRITICAL = logging.CRITICAL
-
-
-logging.getLogger().setLevel(logging.DEBUG)
 log.setLevel(logging.DEBUG)
+logging.getLogger().setLevel(logging.DEBUG)
+
+
