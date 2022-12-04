@@ -10,7 +10,7 @@
 
 ## Documentation
 
--   Check the [pylox documentation](doc/pylogx.md) (some) for more details.
+-   Check the [pylox documentation](doc/pylogx.md) for more details.
 
 ## Quickstart
 
