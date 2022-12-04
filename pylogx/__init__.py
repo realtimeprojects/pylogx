@@ -1,6 +1,6 @@
 from logging import StreamHandler
 from .log import log, Level, IndentFilter, ColorFormatter, PrettyDelta  # noqa: F401
-from .log import registerLevels, readlevels  # noqa: F401
+from .log import registerLevel, readLevels  # noqa: F401
 
 
 def enable_colors(level=None, stream=None, **kwargs):

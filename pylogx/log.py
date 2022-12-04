@@ -1,5 +1,4 @@
 import os
-import sys
 import logging
 import json
 from datetime import datetime, timedelta, timezone
@@ -118,7 +117,7 @@ def readLevels(file=None):
     return levels
 
 
-levels = _readLevels()
+levels = readLevels()
 
 
 def getLevelByNumber(number):
@@ -129,5 +128,3 @@ os.environ['FORCE_COLOR'] = "yes"
 log = logging.getLogger().getChild('pylogx')
 log.setLevel(logging.DEBUG)
 logging.getLogger().setLevel(logging.DEBUG)
-
-
