@@ -32,25 +32,22 @@
 ### Indent your log messages
 
         import logging
-        from pylogx import log, IndentFilter
+        from pylogx import log, Indent
 
         formatter = logging.Formatter(fmt="%(asctime)s %(indent)s%(message)s")
         sh = logging.StreamHandler()
         sh.setFormatter(formatter)
         log.addHandler(sh)
 
-        iflt = IndentFilter(indent=" => ")
-        log.addFilter(iflt)
+        indent = Indent(indent=" => ")
 
         log.info("base level")
 
-        iflt.inc()
+        indent.inc()
         log.info("sub level")
-
-        iflt.inc()
+        indent.inc()
         log.info("sub sub level")
-
-        iflt.dec()
+        indent.dec()
         log.info("sub level")
 
 ### Print log messages with relative time stamp
@@ -60,7 +57,6 @@
         from pylogx import log, PrettyDelta, Level
 
         pd = PrettyDelta()
-        log.addFilter(pd)
         prd = PrettyDelta(name="prettyRelativeDelta", fmt="+%M:%S.%f", relative=True)
         log.addFilter(prd)
         formatter = logging.Formatter(fmt="%(prettyDelta)s [%(prettyRelativeDelta)s] %(message)s")
