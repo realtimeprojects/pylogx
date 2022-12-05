@@ -15,10 +15,12 @@ def enable_colors(level=None, stream=None, **kwargs):
 
         @returns the initialized StreamHandler.
     """
-    cf = ColorFormatter(**kwargs)
+    console = log.getChild("console")
     sh = StreamHandler(stream)
     if level:
         sh.setLevel(level)
+
+    cf = ColorFormatter(**kwargs)
     sh.setFormatter(cf)
     log.addHandler(sh)
-    return sh
+    return console

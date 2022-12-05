@@ -81,17 +81,16 @@ class PrettyDelta(logging.Filter):
         return True
 
 
-class LogCall:
-    def __init__(self, level):
-        self.level = level
+class PylogxLogger(logging.Logger):
+    def __getattr__(self, name):
+        name = name.upper()
 
-    def log(self, *args, **kwargs):
-        log.log(self.level, *args, **kwargs)
-
-
-def _logfnc(level):
-    lc = LogCall(level)
-    return lc.log
+        def _logfnc(*args, **kwargs):
+            level = int(logging.getLevelName(name))
+            return self.log(level, *args, **kwargs)
+        if hasattr(Level, name):
+            return _logfnc
+        return super().__getattr__(name)
 
 
 def registerLevel(number, level):
@@ -100,7 +99,8 @@ def registerLevel(number, level):
         setattr(logging, name, number)
         logging.addLevelName(number, name)
     setattr(Level, name, number)
-    setattr(logging.Logger, name.lower(), _logfnc(number))
+    # if not hasattr(logging, name.lower()):
+    #    setattr(logging.Logger, name.lower(), _logfnc)
 
 
 def readLevels(file=None):
@@ -126,7 +126,10 @@ def getLevelByNumber(number):
     return levels[number]
 
 
+logging.setLoggerClass(PylogxLogger)
+
 os.environ['FORCE_COLOR'] = "yes"
 log = logging.getLogger().getChild('pylogx')
 log.setLevel(logging.DEBUG)
+logging.setLoggerClass(PylogxLogger)
 logging.getLogger().setLevel(logging.DEBUG)
