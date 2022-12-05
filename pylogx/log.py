@@ -5,6 +5,22 @@ from datetime import datetime, timedelta, timezone
 from termcolor import colored
 
 
+class PylogxLogger(logging.Logger):
+    def __getattr__(self, name):
+        name = name.upper()
+
+        def _logfnc(*args, **kwargs):
+            level = int(logging.getLevelName(name))
+            return self.log(level, *args, **kwargs)
+        if hasattr(Level, name):
+            return _logfnc
+        return super().__getattr__(name)
+
+
+logging.setLoggerClass(PylogxLogger)
+log = logging.getLogger().getChild("pylogx")
+
+
 class Level:
     pass
 
@@ -41,10 +57,17 @@ class ColorFormatter(logging.Formatter):
         return fmt
 
 
-class IndentFilter(logging.Filter):
-    def __init__(self, initial=0, indent="   "):
+class Indent:
+    def __init__(self, initial=0, indent="    "):
+        self.old_rf = logging.getLogRecordFactory()
         self._indent = indent
         self._ilevel = initial
+
+        def record_factory(*args, **kwargs):
+            record = self.old_rf(*args, **kwargs)
+            record.indent = self._ilevel * self._indent
+            return record
+        logging.setLogRecordFactory(record_factory)
 
     def inc(self):
         self._ilevel += 1
@@ -53,44 +76,31 @@ class IndentFilter(logging.Filter):
         if self._ilevel > 0:
             self._ilevel -= 1
 
-    def filter(self, record):
-        record.indent = self._ilevel * self._indent
-        return True
 
-
-class PrettyDelta(logging.Filter):
-    def __init__(self, start=None, indent="   ", name="prettyDelta", fmt=None, relative=False):
+class PrettyDelta:
+    def __init__(self, start=None, name="prettyDelta", fmt=None, relative=False):
         self._started = start
         self.name = name
         self.relative = relative
         self.lastUpdate = datetime.now().timestamp()
         self.fmt = fmt
+        self.old_rf = logging.getLogRecordFactory()
 
-    def filter(self, record):
-        if self._started:
-            delta = datetime.fromtimestamp(record.created) - self._started
-        else:
-            delta = timedelta(milliseconds=record.relativeCreated)
-        if self.relative:
-            delta = datetime.fromtimestamp(record.created) - datetime.fromtimestamp(self.lastUpdate)
-            self.lastUpdate = record.created
-        if self.fmt:
-            dt = datetime.fromtimestamp(0, timezone.utc) + delta
-            delta = dt.strftime(self.fmt)
-        record.__setattr__(self.name, delta)
-        return True
-
-
-class PylogxLogger(logging.Logger):
-    def __getattr__(self, name):
-        name = name.upper()
-
-        def _logfnc(*args, **kwargs):
-            level = int(logging.getLevelName(name))
-            return self.log(level, *args, **kwargs)
-        if hasattr(Level, name):
-            return _logfnc
-        return super().__getattr__(name)
+        def record_factory(*args, **kwargs):
+            record = self.old_rf(*args, **kwargs)
+            if self._started:
+                delta = datetime.fromtimestamp(record.created) - self._started
+            else:
+                delta = timedelta(milliseconds=record.relativeCreated)
+            if self.relative:
+                delta = datetime.fromtimestamp(record.created) - datetime.fromtimestamp(self.lastUpdate)
+                self.lastUpdate = record.created
+            if self.fmt:
+                dt = datetime.fromtimestamp(0, timezone.utc) + delta
+                delta = dt.strftime(self.fmt)
+            record.__setattr__(self.name, delta)
+            return record
+        logging.setLogRecordFactory(record_factory)
 
 
 def registerLevel(number, level):
@@ -126,10 +136,6 @@ def getLevelByNumber(number):
     return levels[number]
 
 
-logging.setLoggerClass(PylogxLogger)
-
 os.environ['FORCE_COLOR'] = "yes"
-log = logging.getLogger().getChild('pylogx')
-log.setLevel(logging.DEBUG)
-logging.setLoggerClass(PylogxLogger)
-logging.getLogger().setLevel(logging.DEBUG)
+log.setLevel(Level.DEBUG)
+logging.getLogger().setLevel(Level.DEBUG)

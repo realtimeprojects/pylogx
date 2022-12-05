@@ -1,9 +1,11 @@
 import sys
 import time
+import logging
 import pylogx
 from pylogx import log
 
-pylogx.enable_colors(fmt="%(asctime)s %(message)s",
+pylogx.enable_colors(logging.getLogger(),
+                     fmt="%(asctime)s %(message)s",
                      stream=sys.stdout,
                      level=pylogx.Level.NOTE,
                      ups=[pylogx.Level.NOTE])

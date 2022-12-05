@@ -1,9 +1,9 @@
-from logging import StreamHandler
-from .log import log, Level, IndentFilter, ColorFormatter, PrettyDelta  # noqa: F401
+from logging import StreamHandler, getLogger
+from .log import log, Level, Indent, ColorFormatter, PrettyDelta  # noqa: F401
 from .log import registerLevel, readLevels, levels  # noqa: F401
 
 
-def enable_colors(level=None, stream=None, **kwargs):
+def enable_colors(level=None, stream=None, logger=None, **kwargs):
     """ enable colorization for console.
 
         Setup a StreamHandler, add the ColorFormatter to the StreamHandler and return it.
@@ -15,12 +15,12 @@ def enable_colors(level=None, stream=None, **kwargs):
 
         @returns the initialized StreamHandler.
     """
-    console = log.getChild("console")
     sh = StreamHandler(stream)
     if level:
         sh.setLevel(level)
 
     cf = ColorFormatter(**kwargs)
     sh.setFormatter(cf)
-    log.addHandler(sh)
-    return console
+    logger = logger if logger else getLogger()
+    logger.addHandler(sh)
+    return sh

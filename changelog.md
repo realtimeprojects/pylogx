@@ -1,3 +1,12 @@
+# v1.0.0
+
+-   refactoring of Indent and PrettyDelta,
+    use RecordFactory instead of filters to be compatible
+    with modules instanciating their own logger classes.
+-   add `logger` argument to `enable\_colors()` to allow
+    registering the colorized stream handler to a specific
+    logger.
+
 # v0.4.4
 
 -   fix setting the logger functions for additional log levels

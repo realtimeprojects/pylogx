@@ -1,21 +1,25 @@
 import logging
-from pylogx import log, IndentFilter
+from pylogx import log, Indent
 
 formatter = logging.Formatter(fmt="%(asctime)s %(indent)s%(message)s")
 sh = logging.StreamHandler()
 sh.setFormatter(formatter)
-log.addHandler(sh)
 
-iflt = IndentFilter(indent=" => ")
-log.addFilter(iflt)
+indent = Indent(indent=" => ")
+
+logging.getLogger().addHandler(sh)
 
 log.info("base level")
 
-iflt.inc()
+indent.inc()
 log.info("sub level")
 
-iflt.inc()
+indent.inc()
 log.info("sub sub level")
 
-iflt.dec()
+dd = logging.getLogger("dd")
+dd.warning("hello")
+
+indent.dec()
 log.info("sub level")
+
