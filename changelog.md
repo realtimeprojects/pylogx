@@ -1,3 +1,8 @@
+# v0.4.4
+
+-   fix setting the logger functions for additional log levels
+    malforming logger class.
+
 # v0.4.3
 
 -   export levels for color customization
