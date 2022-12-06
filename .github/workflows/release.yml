@@ -3,11 +3,11 @@ name: Release
 on:
   workflow_run:
     workflows: ["CI"]
-    types: [requested]
-    tags: v*.*.*
+    types: [completed]
+    branches: releases/**
 
 jobs:
-  release:
+  on-success:
     runs-on: ubuntu-latest
 
     steps:
