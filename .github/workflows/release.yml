@@ -1,0 +1,24 @@
+name: Release
+
+on:
+  workflow_run:
+    workflows: ["test"]
+    types: [requested]
+    tags: v*.*.*
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        path: pylogx
+
+    - name: build pylogx
+      run: |
+        echo building pylogx
+
+    - name: publish pylogx
+      run: |
+        echo publishing pylogx
