@@ -4,10 +4,10 @@ import logging
 import pylogx
 from pylogx import log
 
-pylogx.enable_colors(logging.getLogger(),
+pylogx.enable_colors(level=pylogx.Level.NOTE,
                      fmt="%(asctime)s %(message)s",
                      stream=sys.stdout,
-                     level=pylogx.Level.NOTE,
+                     logger=logging.getLogger(),
                      ups=[pylogx.Level.NOTE])
 
 log.trace("Have fun with colorized log messages")
