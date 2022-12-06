@@ -5,9 +5,11 @@ on:
     branches: [ main ]
   pull_request:
     branches: [ main ]
+  tags:
+    v*.*.*
 
 jobs:
-  build:
+  tests:
 
     runs-on: ubuntu-latest
 
