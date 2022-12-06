@@ -5,6 +5,10 @@ from datetime import datetime, timedelta, timezone
 from termcolor import colored
 
 
+class PylogxError(Exception):
+    pass
+
+
 class PylogxLogger(logging.Logger):
     def __getattr__(self, name):
         name = name.upper()
@@ -14,7 +18,7 @@ class PylogxLogger(logging.Logger):
             return self.log(level, *args, **kwargs)
         if hasattr(Level, name):
             return _logfnc
-        return super().__getattr__(name)
+        raise PylogxError(f"Unknown log level: {name}")
 
 
 logging.setLoggerClass(PylogxLogger)

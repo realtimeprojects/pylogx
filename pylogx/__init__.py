@@ -1,6 +1,7 @@
 from logging import StreamHandler, getLogger
 from .log import log, Level, Indent, ColorFormatter, PrettyDelta  # noqa: F401
 from .log import registerLevel, readLevels, levels  # noqa: F401
+from .log import PylogxError  # noqa: F401
 
 
 def enable_colors(level=None, stream=None, logger=None, **kwargs):
