@@ -17,7 +17,7 @@ def enable_colors(level=None, stream=None, logger=None, **kwargs):
     """
     sh = StreamHandler(stream)
     if level:
-        sh.setLevel(level)
+        log.setLevel(level)
 
     cf = ColorFormatter(**kwargs)
     sh.setFormatter(cf)
