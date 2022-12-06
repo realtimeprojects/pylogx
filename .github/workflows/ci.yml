@@ -19,7 +19,7 @@ jobs:
     - name: install pylogx
       run: |
         pip3 install pytest
-        python3 -m pip install pylogx
+        python3 -m pip install pylogx/
 
     - name: run pytests
       run: |
