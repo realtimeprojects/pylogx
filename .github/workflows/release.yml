@@ -1,4 +1,4 @@
-name: releas
+name: release
 
 on:
   workflow_run:
