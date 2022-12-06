@@ -21,5 +21,4 @@ dd = logging.getLogger("dd")
 dd.warning("hello")
 
 indent.dec()
-log.info("sub level")
-
+log.info("back to sub level")
