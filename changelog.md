@@ -1,3 +1,11 @@
+# v1.0.2
+
+-   `enable_colors()`: set level on logger, not on stream.
+
+# v1.0.1
+
+-   documentation fixes
+
 # v1.0.0
 
 -   refactoring of Indent and PrettyDelta,
